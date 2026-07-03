@@ -6,7 +6,7 @@ use meta_signal_cloud::{
     Registration, RejectionReason, Reply, ReplyKind, RequestRejected, ServerType, SshKeyName,
     ZonePolicy,
 };
-use nota_next::{NotaEncode, NotaSource};
+use nota::{NotaEncode, NotaSource};
 use signal_domain_criome::{Projection, ProjectionQuery, ProjectionScope};
 use signal_frame::{RequestPayload, SignalOperationHeads};
 
