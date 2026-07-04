@@ -30,70 +30,70 @@
   ApplyPlan Application
   RetireAccount Retirement
 
-  AccountRegistered { provider Provider provider_account ProviderAccount }
-  CredentialRotated { provider Provider provider_account ProviderAccount }
-  PolicySet { capability_policy_count Integer zone_policy_count Integer }
+  AccountRegistered { Provider ProviderAccount }
+  CredentialRotated { Provider ProviderAccount }
+  PolicySet { capability_policy_count.Integer zone_policy_count.Integer }
   PlanPrepared Plan
   HostPlanPrepared HostPlan
-  PlanApproved { plan PlanIdentifier }
-  PlanApplied { plan PlanIdentifier }
-  AccountRetired { provider Provider provider_account ProviderAccount }
-  RequestRejected { rejection_reason RejectionReason database_marker DatabaseMarker }
+  PlanApproved { plan.PlanIdentifier }
+  PlanApplied { plan.PlanIdentifier }
+  AccountRetired { Provider ProviderAccount }
+  RequestRejected { RejectionReason DatabaseMarker }
 
-  Registration { provider Provider provider_account ProviderAccount credential_handle CredentialHandle }
-  Rotation { provider Provider provider_account ProviderAccount credential_handle CredentialHandle }
+  Registration { Provider ProviderAccount CredentialHandle }
+  Rotation { Provider ProviderAccount CredentialHandle }
   CapabilityDirective [Enable Disable]
-  CapabilityPolicy { provider Provider provider_account ProviderAccount capability Capability capability_directive CapabilityDirective }
-  ZonePolicy { provider Provider provider_account ProviderAccount allowed_zones (Vector DomainName) }
-  Policy { zones (Vector ZonePolicy) capabilities (Vector CapabilityPolicy) }
+  CapabilityPolicy { Provider ProviderAccount Capability CapabilityDirective }
+  ZonePolicy { Provider ProviderAccount allowed_zones.(Vector DomainName) }
+  Policy { zones.(Vector ZonePolicy) capabilities.(Vector CapabilityPolicy) }
   PlanPreparation DesiredState
   HostPlanPreparation DesiredHostState
-  HostDestruction { provider Provider host_name DomainName }
-  ProjectionPreparation { provider Provider projection Projection }
-  Approval { plan PlanIdentifier }
-  Application { plan PlanIdentifier }
-  Retirement { provider Provider provider_account ProviderAccount }
+  HostDestruction { Provider host_name.DomainName }
+  ProjectionPreparation { Provider Projection }
+  Approval { plan.PlanIdentifier }
+  Application { plan.PlanIdentifier }
+  Retirement { Provider ProviderAccount }
 
   RejectionReason [CredentialHandleUnknown ProviderNotConfigured AccountUnknown PlanUnknown PlanNotApproved PlanGenerationFailed CapabilityUnauthorized]
   Plan {
-    identifier PlanIdentifier
-    provider Provider
-    zone DomainName
-    records_to_create (Vector DomainNameSystemRecord)
-    records_to_update (Vector DomainNameSystemRecord)
-    record_names_to_delete (Vector DomainName)
-    redirects_to_create (Vector RedirectRule)
-    redirects_to_update (Vector RedirectRule)
-    redirect_sources_to_delete (Vector DomainName)
+    identifier.PlanIdentifier
+    Provider
+    zone.DomainName
+    records_to_create.(Vector DomainNameSystemRecord)
+    records_to_update.(Vector DomainNameSystemRecord)
+    record_names_to_delete.(Vector DomainName)
+    redirects_to_create.(Vector RedirectRule)
+    redirects_to_update.(Vector RedirectRule)
+    redirect_sources_to_delete.(Vector DomainName)
   }
   DesiredState {
-    provider Provider
-    zone DomainName
-    records (Vector DomainNameSystemRecord)
-    redirects (Vector RedirectRule)
+    Provider
+    zone.DomainName
+    records.(Vector DomainNameSystemRecord)
+    redirects.(Vector RedirectRule)
   }
   HostPlan {
-    identifier PlanIdentifier
-    provider Provider
-    host_name DomainName
-    server_type ServerType
-    image_name ImageName
-    ssh_key_name SshKeyName
-    intent HostIntent
+    identifier.PlanIdentifier
+    Provider
+    host_name.DomainName
+    ServerType
+    ImageName
+    SshKeyName
+    intent.HostIntent
   }
   DesiredHostState {
-    provider Provider
-    host_name DomainName
-    server_type ServerType
-    image_name ImageName
-    ssh_key_name SshKeyName
+    Provider
+    host_name.DomainName
+    ServerType
+    ImageName
+    SshKeyName
   }
   HostIntent [Create Destroy]
-  Projection { projection_query ProjectionQuery records (Vector DomainNameSystemRecord) redirects (Vector RedirectRule) }
-  ProjectionQuery { domain DomainName projection_scope ProjectionScope }
+  Projection { ProjectionQuery records.(Vector DomainNameSystemRecord) redirects.(Vector RedirectRule) }
+  ProjectionQuery { domain.DomainName ProjectionScope }
   ProjectionScope [PublicRecords AllRecords]
-  DomainNameSystemRecord { name DomainName record_kind RecordKind content RecordContent }
-  RedirectRule { source DomainName target DomainName redirect_status RedirectStatus }
+  DomainNameSystemRecord { name.DomainName RecordKind content.RecordContent }
+  RedirectRule { source.DomainName target.DomainName RedirectStatus }
   RecordKind [Address AddressSix CanonicalName MailExchange Text Service]
   RedirectStatus [Permanent Temporary]
   RecordContent String
@@ -109,5 +109,5 @@
   SshKeyName String
   CommitSequence Integer
   StateDigest Integer
-  DatabaseMarker { commit_sequence CommitSequence state_digest StateDigest }
+  DatabaseMarker { CommitSequence StateDigest }
 }
