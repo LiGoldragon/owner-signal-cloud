@@ -1,0 +1,8 @@
+Interface.{1 0 0}
+[]
+{
+  []
+  []
+  []
+  [SshKeyName.String HostIntent.[Create Destroy] ImageName.String CredentialHandle.String RejectionReason.[CredentialHandleUnknown ProviderNotConfigured PlanNotApproved PlanGenerationFailed CapabilityUnauthorized PlanUnknown AccountUnknown] ServerType.String CapabilityDirective.[Enable Disable]]
+}

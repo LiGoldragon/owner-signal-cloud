@@ -3,10 +3,9 @@
 `meta-signal-cloud` is the meta policy Signal contract for the `cloud`
 component. It controls provider account registration, credential-handle
 rotation, policy changes, plan preparation, and live provider plan
-application. It also accepts provider-neutral projections from `domain-criome`
-and turns them into daemon-held provider plans.
+application.
 
-## 0.5 · Direction
+## Authority shape
 
 `meta-signal-cloud` is the meta authority contract for the `cloud` component. It exists because live provider mutation changes external accounts, paid resources, and public domain identity — those mutation-class verbs must be separated from the ordinary `signal-cloud` read surface by contract and socket boundary. This is a workspace generalization: a component whose state surface reflects an external resource exposes reads on the ordinary contract and mutations on the meta contract.
 
@@ -20,6 +19,22 @@ applies plans because prepared plans are daemon-owned mutation intent and live
 provider mutation changes external accounts, paid resources, and public domain
 identity.
 
+## Bootstrap stage
+
+`schema/authority.ethos` is the canonical Protos Interface for the vocabulary
+owned by this authority boundary. Its identities and canonical order are
+sealed by `src/bootstrap_manifest.rs`; the build accepts the source only
+through the strict, authority-verified bootstrap transaction and checks the
+Rust projection into `src/schema/authority/generated.rs`.
+
+The Interface is deliberately role-free. At this stage the verified producer
+projects Types only: durable credential handles, policy directives, host
+intent, rejection reasons, and provider-choice names. The `signal_channel!`
+operations and replies in `src/lib.rs` remain the truthful handwritten wire
+contract. They do not pretend to be generated Input, Output, or Refusal roles.
+As Protos gains those projections, the role slots can become authoritative
+without preserving this Rust implementation as a substrate.
+
 ## Public Operations
 
 - `RegisterAccount(Registration)` binds a provider account to a credential
@@ -28,9 +43,8 @@ identity.
   provider account.
 - `SetPolicy(Policy)` replaces the daemon's provider-authority policy.
 - `PreparePlan(PlanPreparation)` writes a provider plan into daemon plan state.
-- `PrepareProjection(ProjectionPreparation)` accepts a `signal-domain-criome`
-  projection and lets `cloud` lower it into a provider plan under meta
-  authority.
+- `PrepareHostPlan(HostPlanPreparation)` prepares host creation intent.
+- `PrepareHostDestruction(HostDestruction)` prepares host destruction intent.
 - `ApprovePlan(Approval)` marks a prepared plan as approved for later
   application.
 - `ApplyPlan(Application)` applies a prepared plan.
@@ -68,6 +82,4 @@ and its mutation surface on the meta contract.
 
 - Depend on `signal-frame`, not deprecated `signal-core`.
 - Reuse public provider/domain/plan types from `signal-cloud`.
-- Reuse provider-neutral projection types from `signal-domain-criome` at the
-  cloud/domain handoff boundary.
 - Do not expose raw provider credential bytes.

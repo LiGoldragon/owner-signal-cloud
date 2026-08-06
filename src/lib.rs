@@ -8,12 +8,17 @@ use nota::{NotaDecode, NotaEncode};
 use rkyv::{Archive, Deserialize as RkyvDeserialize, Serialize as RkyvSerialize};
 use signal_frame::signal_channel;
 
+pub mod bootstrap_manifest;
 pub mod schema;
+
+/// Canonical authority Interface text verified by the build transaction.
+pub const AUTHORITY_INTERFACE_SOURCE: &str = include_str!("../schema/authority.ethos");
+/// Checked Rust projection of the authority Interface's role-free Types.
+pub const AUTHORITY_INTERFACE_RUST: &str = include_str!("schema/authority/generated.rs");
 
 pub use signal_cloud::{
     Capability, DesiredState, DomainName, Plan, PlanIdentifier, Provider, ProviderAccount,
 };
-pub use signal_domain_criome::Projection;
 
 #[derive(
     Archive,
@@ -241,14 +246,6 @@ pub struct HostPlan {
 #[derive(
     Archive, RkyvSerialize, RkyvDeserialize, NotaEncode, NotaDecode, Debug, Clone, PartialEq, Eq,
 )]
-pub struct ProjectionPreparation {
-    pub provider: Provider,
-    pub projection: Projection,
-}
-
-#[derive(
-    Archive, RkyvSerialize, RkyvDeserialize, NotaEncode, NotaDecode, Debug, Clone, PartialEq, Eq,
-)]
 pub struct Approval {
     pub plan: PlanIdentifier,
 }
@@ -352,7 +349,6 @@ signal_channel! {
         operation PreparePlan(PlanPreparation),
         operation PrepareHostPlan(HostPlanPreparation),
         operation PrepareHostDestruction(HostDestruction),
-        operation PrepareProjection(ProjectionPreparation),
         operation ApprovePlan(Approval),
         operation ApplyPlan(Application),
         operation RetireAccount(Retirement),

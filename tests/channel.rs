@@ -2,12 +2,10 @@ use meta_signal_cloud::{
     AccountRegistered, Application, Approval, Capability, CapabilityDirective, CapabilityPolicy,
     CredentialHandle, DesiredHostState, DesiredState, DomainName, HostDestruction, HostIntent,
     HostPlan, HostPlanPreparation, ImageName, Operation, OperationKind, Plan, PlanApplied,
-    PlanIdentifier, PlanPreparation, Policy, ProjectionPreparation, Provider, ProviderAccount,
-    Registration, RejectionReason, Reply, ReplyKind, RequestRejected, ServerType, SshKeyName,
-    ZonePolicy,
+    PlanIdentifier, PlanPreparation, Policy, Provider, ProviderAccount, Registration,
+    RejectionReason, Reply, ReplyKind, RequestRejected, ServerType, SshKeyName, ZonePolicy,
 };
 use nota::{NotaEncode, NotaSource};
-use signal_domain_criome::{Projection, ProjectionQuery, ProjectionScope};
 use signal_frame::{RequestPayload, SignalOperationHeads};
 
 fn encode_to_text<T: NotaEncode>(value: &T) -> String {
@@ -34,7 +32,6 @@ fn operations_are_meta_authority_verbs() {
             "PreparePlan",
             "PrepareHostPlan",
             "PrepareHostDestruction",
-            "PrepareProjection",
             "ApprovePlan",
             "ApplyPlan",
             "RetireAccount",
@@ -173,23 +170,6 @@ fn host_plan_prepared_reply_carries_public_host_plan_record() {
     let text = encode_to_text(&reply);
     let decoded = NotaSource::new(&text).parse::<Reply>().expect("decode");
     assert_eq!(decoded, reply);
-}
-
-#[test]
-fn projection_preparation_uses_domain_projection_contract() {
-    let operation = Operation::PrepareProjection(ProjectionPreparation {
-        provider: Provider::Cloudflare,
-        projection: Projection {
-            query: ProjectionQuery {
-                domain: signal_domain_criome::DomainName::new("goldragon.criome"),
-                scope: ProjectionScope::PublicRecords,
-            },
-            records: vec![],
-            redirects: vec![],
-        },
-    });
-
-    assert_eq!(operation.operation_kind(), OperationKind::PrepareProjection);
 }
 
 #[test]
