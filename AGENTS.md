@@ -6,3 +6,9 @@ daemon, storage, actors, provider clients, or secret bytes.
 
 Secret material crosses this contract only as durable secret handles.
 Do not add fields that carry provider tokens, passwords, or private keys.
+
+## Protos estate status
+
+Stack: correct-new destination
+Status: active component contract, current checkout legacy-wired
+This checkout is not proof of correct-new adoption.
